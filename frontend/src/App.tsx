@@ -37,7 +37,7 @@ import AdminPanel from './pages/AdminPanel';
 const rawApiUrl = import.meta.env.VITE_API_URL || "";
 export const API_BASE = rawApiUrl 
   ? (rawApiUrl.endsWith("/api") ? rawApiUrl : `${rawApiUrl.replace(/\/$/, "")}/api`)
-  : "http://localhost:8000/api";
+  : "/api";
 import { supabase } from './utils/supabaseClient';
 
 // Authentication Context
