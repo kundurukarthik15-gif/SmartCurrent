@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: smart_bill_db
+    restart: always
+    environment:
+      POSTGRES_DB: smart_bill_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres_secure_password_982374
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: smart_bill_backend
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres_secure_password_982374@db:5432/smart_bill_db
+      - SECRET_KEY=PRODUCTION_JWT_SECRET_STRING_VALUE_METER_PREDICTION
+      - ADMIN_EMAIL=admin@smartbill.com
+      - ADMIN_PASSWORD=AdminPass123!
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - ./ml:/ml
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: smart_bill_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

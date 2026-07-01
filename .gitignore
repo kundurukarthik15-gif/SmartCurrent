@@ -1,0 +1,41 @@
+# Node dependencies
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python environment and cache
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Databases and data
+*.db
+*.sqlite3
+database/uploads/*
+!database/uploads/.gitkeep
+
+# Environment variables
+.env
+.env.production
+.env.development
+.env.local
+backend/.env
+frontend/.env
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS Files
+.DS_Store
+Thumbs.db
