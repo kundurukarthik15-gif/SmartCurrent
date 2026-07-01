@@ -30,7 +30,10 @@ import BillHistory from './pages/BillHistory';
 import Chatbot from './pages/Chatbot';
 import AdminPanel from './pages/AdminPanel';
 
-export const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+const rawApiUrl = import.meta.env.VITE_API_URL || "";
+export const API_BASE = rawApiUrl 
+  ? (rawApiUrl.endsWith("/api") ? rawApiUrl : `${rawApiUrl.replace(/\/$/, "")}/api`)
+  : "http://localhost:8000/api";
 import { supabase } from './utils/supabaseClient';
 
 // Authentication Context

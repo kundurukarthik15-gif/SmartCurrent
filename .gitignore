@@ -39,3 +39,13 @@ frontend/.env
 # OS Files
 .DS_Store
 Thumbs.db
+
+# Custom shims
+powershell.cmd
+backend/powershell.cmd
+frontend/powershell.cmd
+
+# Generated data
+dataset/
+ml/historical_consumption_data.csv
+
