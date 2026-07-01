@@ -1,9 +1,9 @@
 services:
-  # Backend Web Service
+  # Unified Web Service (FastAPI Backend + React Frontend served on the same port)
   - type: web
-    name: smart-current-backend
+    name: smart-current-bill-predictor
     env: python
-    buildCommand: pip install -r backend/requirements.txt && python setup_project.py
+    buildCommand: python build_render.py
     startCommand: PYTHONPATH=backend uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
@@ -16,20 +16,3 @@ services:
         value: admin@smartbill.com
       - key: ADMIN_PASSWORD
         value: AdminPass123!
-
-  # Frontend Static Site
-  - type: web
-    name: smart-current-frontend
-    env: static
-    buildCommand: cd frontend && npm install && npm run build
-    publishDir: frontend/dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-    envVars:
-      - key: VITE_API_URL
-        fromService:
-          name: smart-current-backend
-          type: web
-          property: url
