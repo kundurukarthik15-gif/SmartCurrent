@@ -30,6 +30,10 @@ import BillHistory from './pages/BillHistory';
 import Chatbot from './pages/Chatbot';
 import AdminPanel from './pages/AdminPanel';
 
+// Resolves the backend API endpoint dynamically.
+// In development, it defaults to the local server (http://localhost:8000/api).
+// In production (e.g., Render), VITE_API_URL is supplied by the hosting service.
+// This handler sanitizes and appends /api to the base URL if it's not already present.
 const rawApiUrl = import.meta.env.VITE_API_URL || "";
 export const API_BASE = rawApiUrl 
   ? (rawApiUrl.endsWith("/api") ? rawApiUrl : `${rawApiUrl.replace(/\/$/, "")}/api`)
