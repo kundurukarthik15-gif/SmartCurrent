@@ -1,5 +1,7 @@
 # backend/app/main.py
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import os
@@ -62,9 +64,28 @@ def startup_db_init():
 
 @app.get("/")
 def health_check():
+    static_index = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "index.html")
+    if os.path.exists(static_index):
+        return FileResponse(static_index)
     return {
         "status": "healthy",
         "app_name": settings.PROJECT_NAME,
         "api_prefix": settings.API_V1_STR,
         "swagger_documentation": "/docs"
     }
+
+# Mount static files and handle catch-all for SPA client-side routing
+static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+if os.path.exists(static_dir):
+    # Mount assets folder
+    assets_dir = os.path.join(static_dir, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    # Catch-all router for React routes (excluding API and Docs)
+    @app.get("/{catchall:path}")
+    async def serve_frontend(catchall: str):
+        if catchall.startswith("api") or catchall.startswith("docs") or catchall.startswith("openapi.json"):
+            raise HTTPException(status_code=404)
+        return FileResponse(os.path.join(static_dir, "index.html"))
+
