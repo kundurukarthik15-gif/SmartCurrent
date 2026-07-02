@@ -48,4 +48,6 @@ frontend/powershell.cmd
 # Generated data
 dataset/
 ml/historical_consumption_data.csv
+backend/app/static/
+
 
