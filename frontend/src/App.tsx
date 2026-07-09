@@ -521,8 +521,9 @@ function AuthPortal({ login, theme, setTheme }: AuthPortalProps) {
         } else {
           setMessage({ type: 'error', text: data.detail || 'Email not found' });
         }
-      } catch {
-        setMessage({ type: 'error', text: 'Backend server is offline.' });
+      } catch (err: any) {
+        console.error("Forgot password error:", err);
+        setMessage({ type: 'error', text: `Backend connection error: ${err.message || 'Server is offline.'}` });
       } finally {
         setIsLoading(false);
       }
@@ -552,8 +553,9 @@ function AuthPortal({ login, theme, setTheme }: AuthPortalProps) {
         } else {
           setMessage({ type: 'error', text: data.detail || 'Registration failed' });
         }
-      } catch {
-        setMessage({ type: 'error', text: 'Backend server is offline. Start the FastAPI server first.' });
+      } catch (err: any) {
+        console.error("Registration error:", err);
+        setMessage({ type: 'error', text: `Backend connection error: ${err.message || 'Server is offline. Start the FastAPI server first.'}` });
       } finally {
         setIsLoading(false);
       }
@@ -576,8 +578,9 @@ function AuthPortal({ login, theme, setTheme }: AuthPortalProps) {
       } else {
         setMessage({ type: 'error', text: data.detail || 'Incorrect email or password.' });
       }
-    } catch {
-      setMessage({ type: 'error', text: 'Backend server is offline. Start the FastAPI server first.' });
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setMessage({ type: 'error', text: `Backend connection error: ${err.message || 'Server is offline. Start the FastAPI server first.'}` });
     } finally {
       setIsLoading(false);
     }
@@ -603,8 +606,9 @@ function AuthPortal({ login, theme, setTheme }: AuthPortalProps) {
       } else {
         setMessage({ type: 'error', text: data.detail || 'Google Sign-In failed.' });
       }
-    } catch {
-      setMessage({ type: 'error', text: 'Backend server is offline. Start the FastAPI server first.' });
+    } catch (err: any) {
+      console.error("Google Sign-In error:", err);
+      setMessage({ type: 'error', text: `Backend connection error: ${err.message || 'Server is offline. Start the FastAPI server first.'}` });
     } finally {
       setIsLoading(false);
     }
