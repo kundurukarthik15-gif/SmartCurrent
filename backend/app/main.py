@@ -1,10 +1,11 @@
 # backend/app/main.py
 from fastapi import FastAPI, Depends, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import os
+import traceback
 
 from app.core.config import settings
 from app.core.db import get_db, init_db, User, TariffPlan, Consumer
@@ -20,6 +21,19 @@ app = FastAPI(
     docs_url="/docs",
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
+
+# Global unhandled exception handler to capture and expose backend errors as JSON
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    print(f"Unhandled Exception: {exc}")
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={
+            "detail": f"Backend Error: {str(exc)}",
+            "traceback": traceback.format_exc()
+        }
+    )
 
 # CORS configurations
 app.add_middleware(
